@@ -1,0 +1,32 @@
+@startuml  Icons
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/java.puml
+!include DEVICONS/angular.puml
+!include DEVICONS/msql_server.puml
+
+SHOW_PERSON_PORTRAIT()
+
+AddRelTag("async", $lineStyle = DashedLine())
+
+Person(User, "Client", "Empresa que consome os serviços da Casting.")
+  
+System(Casting,            "Solução Casting", "Sistema acessado pelo Cliente")
+System_Boundary(gateway,   "Módulos"){
+Container(Comunicação,     "Comunicação", " Modulo ", "Modulo de comunicação", $sprite = "dotnet")
+Container(Enquete,         "Enquete", " Modulo ", "Criação de enquetes", $sprite = "dotnet")
+Container(Criar_enquetes,  "Criar enquetes", " Modulo ", "Criação de enquetes", $sprite = "dotnet")
+Container(Relatorios_enquetes,  "Relatório de enquetes", " Modulo ", "Criação de enquetes", $sprite = "dotnet")
+
+ContainerDb(BD,       "Banco de Dados", " SQL Server ", "Contém informações das enquetes criadas")
+
+Rel(User, Casting,   "Utiliza","http://169.62.128.221/Casting/CASTING_ADM_HOMO/Unidade")
+Rel(Casting,Comunicação,      "Acessa o módulo de Enquete")
+Rel(Comunicação,Enquete,      "Acessa o módulo")
+Rel(Enquete,Criar_enquetes,   "Acessa o módulo")
+Rel(BD,Relatorios_enquetes,   "Acessa o módulo")
+Rel(Criar_enquetes,BD,        "Acessa o módulo")
+
+}
+
+@enduml

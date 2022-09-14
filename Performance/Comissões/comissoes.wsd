@@ -1,0 +1,48 @@
+@startuml  Icons
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/java.puml
+!include DEVICONS/angular.puml
+!include DEVICONS/msql_server.puml
+
+SHOW_PERSON_PORTRAIT()
+LAYOUT_LEFT_RIGHT()
+AddRelTag("async", $lineStyle = DashedLine())
+
+Person(User, "Client", "Empresa que consome os serviços da Casting.")
+
+System(Casting,     "Solução Casting", "Sistema acessado pelo Cliente")
+System_Boundary(gateway, "Full Cycle Gateway"){
+Container(Comissões,"Comissões", " Modulo ", "Gestão dos indicadores de vendas", $sprite = "dotnet")
+Container(Comissões,"Comissões ", " Indicador ", "Gestão dos indicadores de vendas", $sprite = "dotnet")
+Container(Mobile,   "Mobile", "Plataforma de acesso", "Aplicativo mobile de gestão de performance", $sprite = "dotnet")
+Container(Web,      "Web", "Plataforma de acesso", "Aplicativo web de gestão de performance", $sprite = "dotnet")
+Container(API,      "Controller", " API ", "Controlador ", $sprite = "dotnet")
+Container(Acessos,  "Níveis de acesso", " Níveis de acesso ", "Controlador ", $sprite = "dotnet")
+Container(Regras,   "Regras de comissão", " Níveis de acesso ", "Controlador ", $sprite = "dotnet")
+
+Container(Geral,      "Geral", " Níveis de acesso ", "Controlador ", $sprite = "dotnet")
+Container(Regiao,     "Regiao", " Níveis de acesso ", "Controlador ", $sprite = "dotnet")
+Container(Unidade,    "Unidade", " Níveis de acesso ", "Controlador ", $sprite = "dotnet")
+Container(Funcionario,"Funcionário", " Níveis de acesso ", "Controlador ", $sprite = "dotnet")
+
+ContainerDb(BD,    "Banco de Dados", " SQL Server ", "Contém informações sobre produtos, pedidos e faturas.")
+
+Rel(User, Casting,    "Usa","HTTP")
+Rel(Casting,Comissões,"Acessa o módulo")
+Rel(Comissões,Mobile, "Acessa o módulo")
+Rel(Comissões,Web,    "Acessa o módulo")
+Rel(Mobile,API,       "Acessa o módulo")
+Rel(Web,API,          "Acessa o módulo")
+Rel(Acessos,Regras,   "Acessa o banco de dados")
+Rel(API,Acessos,      "Acessa o banco de dados")
+Rel(Regras,BD,        "Acessa o banco de dados")
+Rel(BD,API,           "Acessa o banco de dados",$tags = "async")
+
+Rel(Acessos,Unidade,          "Acessa o banco de dados")
+Rel(Acessos,Funcionario,      "Acessa o banco de dados")
+Rel(Acessos,Regiao,           "Acessa o banco de dados")
+Rel(Acessos,Geral,            "Acessa o banco de dados")
+}
+
+@enduml

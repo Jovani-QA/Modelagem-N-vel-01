@@ -1,0 +1,48 @@
+@startuml  Icons
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/java.puml
+!include DEVICONS/angular.puml
+!include DEVICONS/msql_server.puml
+
+SHOW_PERSON_PORTRAIT()
+LAYOUT_LEFT_RIGHT()
+AddRelTag("async", $lineStyle = DashedLine())
+
+Person(User, "Cliente", "Empresa que consome os serviços da Casting.")
+
+System(Casting,    "Solução Casting", "Sistema acessado pelo Cliente")
+System_Boundary(Módulo, "Metas"){
+Container(Metas,   "Metas", " Modulo ", "Gestão dos indicadores de metas", $sprite = "dotnet")
+Container(Metas,   "Metas", " Indicador ", "Gestão dos indicadores de vendas", $sprite = "dotnet")
+Container(Mobile,  "Mobile", "Plataforma de acesso", "Aplicativo mobile de gestão de performance", $sprite = "dotnet")
+Container(Web,     "Web", "Plataforma de acesso", "Aplicativo web de gestão de performance", $sprite = "dotnet")
+Container(API,     "Controller", " API ", "Controlador ", $sprite = "dotnet")
+ContainerDb(DB,    "Banco de Dados", " SQL Server ", "Contém informações sobre produtos, pedidos e faturas.")
+Container(Periodo, "Valor da meta por período", " Funionalidade ", "Traz as informações, de metas estipuladas pelo cliente para alavancar vendas, podendo ser elas mensais, quinzenais, semanais. As metas aparecem no gráfico ( SORRISO ).")
+Container(Gap,     "Gap", " Funionalidade ", "Diferença entre quanto o funcionário  já vendeu e o que  ainda falta atingir. É apresentado em um gráfico chamado ( SORRISO ).")
+Container(Meta_ate,"Meta até", " Funionalidade ", "Somatória das metas dos dias anteriores no período atual")
+
+Container(Unidade,    "Valor da meta por unidade", "Funionalidade", "( Visibilidade )  Gestor da unidade ou dono da franquia")
+Container(Funcionario,"Valor da meta por funcionário", "Funionalidade", " ( Visibilidade ) Gestor , dono da franquia e funcionário")
+Container(Categoria,  "Valor da meta por Categoria", "Funionalidade", " ( Visibilidade ) Gestor , dono da franquia e funcionário")
+
+Rel(User, Casting,   "link","http")
+Rel(Casting,Metas,   "Acessa o módulo")
+Rel(Metas,Mobile,    "Acessa o módulo",$tags = "async")
+Rel(Metas,Web,       "Acessa o módulo",$tags = "async")
+Rel(Mobile,API,      "Acessa o módulo",$tags = "async")
+Rel(Web,API,         "Acessa o módulo",$tags = "async")
+Rel(API,DB,          "Acessa o banco de dados")
+Rel(DB,Periodo,      "Acessa o módulo")
+Rel(DB,Gap,          "Acessa o módulo")
+Rel(DB,Meta_ate,     "Acessa o módulo")
+Rel(DB,API,          "Retorna as informações ",$tags = "async")
+
+Rel(Periodo,Unidade,     "Acessa o módulo",$tags = "async")
+Rel(Periodo,Funcionario, "Acessa o módulo",$tags = "async")
+Rel(Periodo,Categoria,   "Acessa o módulo",$tags = "async")
+
+}
+
+@enduml

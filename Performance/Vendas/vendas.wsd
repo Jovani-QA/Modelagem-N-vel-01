@@ -1,0 +1,39 @@
+@startuml  Icons
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/java.puml
+!include DEVICONS/angular.puml
+!include DEVICONS/msql_server.puml
+
+SHOW_PERSON_PORTRAIT()
+
+AddRelTag("async", $lineStyle = DashedLine())
+
+Person(User, "Client", "Empresa que consome os serviços da Casting.")
+
+System(Casting,       "Solução Casting", "Sistema acessado pelo Cliente")
+System_Boundary(gateway, "Full Cycle Gateway"){
+Container(Vendas,     "Vendas", " Modulo ", "Gestão dos indicadores de vendas", $sprite = "dotnet")
+Container(Mobile,     "Mobile", "Plataforma de acesso", "Aplicativo mobile de gestão de performance", $sprite = "dotnet")
+Container(Web,        "Web", "Plataforma de acesso", "Utilizado para retirar relatórios", $sprite = "dotnet")
+Container(API,        "Controller", " API ", "Controlador ", $sprite = "dotnet")
+Container(Acessos,    "Níveis de acesso", " Níveis de acesso ", "Controlador ", $sprite = "dotnet")
+Container(Indicadores,    "Indicadores", " Indicadores ", "Indicadores de performance", $sprite = "dotnet")
+
+
+ContainerDb(BD,       "Banco de Dados", " SQL Server ", "Contém informações sobre produtos, pedidos e faturas.")
+
+Rel(User, Casting,   "Utiliza","http://169.62.128.221/Casting/CASTING_ADM_HOMO/Unidade")
+Rel(Casting,Vendas,  "Acessa o módulo")
+Rel(Vendas,Mobile,   "Acessa o módulo")
+Rel(Vendas,Web,      "Acessa o módulo")
+Rel(Mobile,API,      "Acessa o módulo")
+Rel(Web,API,         "Acessa o módulo")
+Rel(API,Acessos,     "Acessa o banco de dados")
+Rel(Acessos,BD,      "Acessa o banco de dados")
+Rel(BD,Indicadores,  "Acessa o banco de dados")
+
+
+}
+
+@enduml
